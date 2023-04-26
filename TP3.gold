@@ -1,0 +1,56 @@
+using gold.structures.automaton.*
+using gold.visualization.automaton.*
+
+
+procedure main(args:String[]) begin
+	A := {"I","M","N","DT","G","H","L","J","K","NK","U"}
+	B := {'m','n','.','g','h','l','j','k','[',']'}
+	C := {'x','y','z','w'}
+	D := "I"
+	E := {"I"}
+	F := GPushdownAutomaton(A,B,C,D,E)
+	
+	
+	//Pendown G
+	
+	F.delta("I","G",'g').push("xy")
+	F.delta("G","DT",'.').pop("y")
+	F.delta("DT","I","").pop("x")
+	
+	//Penup H
+	
+	F.delta("I","H",'h').push("xy")
+	F.delta("H","DT",'.').pop("y")
+	F.delta("DT","I","").pop("x")
+	
+	//Forward M
+	
+	F.delta("I","M",'m').push("xyz")
+	F.delta("M","N",'n').pop("z")
+	F.delta("N","DT",'.').pop("y")
+	F.delta("DT","I","").pop("x")
+	
+	//Right L
+	F.delta("I","L",'l').push("xyz")
+	F.delta("L","N",'n').pop("z")
+	F.delta("N","DT",'.').pop("y")
+	F.delta("DT","I","").pop("x")
+	
+	//Left J
+	F.delta("I","J",'j').push("xyz")
+	F.delta("J","N",'n').pop("z")
+	F.delta("N","DT",'.').pop("y")
+	F.delta("DT","I","").pop("x")
+	
+	//Repeat K
+	F.delta("I","K",'k').push("xy")
+	F.delta("K","NK",'n').pop("y")
+	F.delta("NK","I",'[').push("wz")
+	F.delta("I","U","]").pop("z")
+	F.delta("U","U",".").pop("w")
+	F.delta("U","I","").pop("x")
+	
+	GAutomataFrame.show(F)
+end 
+	
+	
